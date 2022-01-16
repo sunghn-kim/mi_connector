@@ -69,7 +69,7 @@ def setStatus(params){
 
  	switch(params.key){
     case "relativeHumidity":
-    	sendEvent(name:"humidity", value: params.data )
+    	sendEvent(name:"humidity", value: params.data, unit: "%")
     	break;
     case "mode":
     	if(model == "Humidifier1") {
@@ -99,8 +99,8 @@ def setStatus(params){
 		def st = data.replace("C","");
 		def stf = Float.parseFloat(st)
 		def tem = Math.round(stf*10)/10
-        sendEvent(name:"temperature", value: tem )
-        sendEvent(name:"temperature2", value: state.temp + ": " + tem )
+        sendEvent(name:"temperature", value: tem, unit:"C")
+        sendEvent(name:"temperature2", value: state.temp + ": " + tem, unit:"C")
     	break;
     case "useTime":
 		def para = "${params.data}"
@@ -112,7 +112,7 @@ def setStatus(params){
         sendEvent(name:"use_time", value: leftday + "d " + lefthour + "h" )
     	break;
     case "targetHumidity":
-        sendEvent(name:"level", value: params.data)
+        sendEvent(name:"level", value: params.data, unit: "%")
     	break;
     case "depth":
 		def para = "${params.data}"
@@ -248,9 +248,9 @@ def callback(physicalgraph.device.HubResponse hubResponse){
 	        sendEvent(name:"water", value: Math.round(jsonObj.properties.depth/12*10))
 	        sendEvent(name:"water2", value: state.wdep + ": " + Math.round(jsonObj.properties.depth/12*10))
         }
-        sendEvent(name:"temperature", value: jsonObj.properties.temperature.value)
-        sendEvent(name:"temperature2", value: state.temp + ": " + jsonObj.properties.temperature.value)
-        sendEvent(name:"relativeHumidity", value: jsonObj.properties.relativeHumidity)
+        sendEvent(name:"temperature", value: jsonObj.properties.temperature.value, unit:"C")
+        sendEvent(name:"temperature2", value: state.temp + ": " + jsonObj.properties.temperature.value, unit:"C")
+        sendEvent(name:"relativeHumidity", value: jsonObj.properties.relativeHumidity, unit: "%")
         sendEvent(name:"buzzer", value: (jsonObj.state.buzzer == true ? "on" : "off"))
         sendEvent(name:"level", value: jsonObj.properties.targetHumidity)
 
